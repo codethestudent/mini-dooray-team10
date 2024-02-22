@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,10 +11,13 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(name = "comment")
+@AllArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String commentId;
+    @Column(name = "comment_id")
+    private int commentId;
 
     @Column(name = "content")
     private String content;
@@ -22,10 +26,16 @@ public class Comment {
     private LocalDateTime createdDate;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private ProjectMember userId;
+    @JoinColumns({
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+    })
+    private ProjectMember projectMember;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
+
+    public Comment() {
+    }
 }

@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+@Table(name = "project_member")
+@AllArgsConstructor
 public class ProjectMember {
     @EmbeddedId
     private Pk pk;
@@ -20,9 +22,14 @@ public class ProjectMember {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    public ProjectMember() {
+    }
+
     @Embeddable
     @NoArgsConstructor
     @AllArgsConstructor
+    @Getter
+    @Setter
     public static class Pk implements Serializable {
         @Column(name = "user_id")
         private String userId;

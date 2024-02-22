@@ -1,5 +1,7 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@Table(name = "task")
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +23,7 @@ public class Task {
     @Column(name = "task_name")
     private String taskName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(name = "dead_line")
     private LocalDateTime deadLine;
 
@@ -33,7 +38,9 @@ public class Task {
     @JoinColumn(name = "milestone_id")
     private Milestone milestone;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private ProjectMember userId;
+    @Column(name = "user_id")
+    private String userId;
+
+    public Task() {
+    }
 }

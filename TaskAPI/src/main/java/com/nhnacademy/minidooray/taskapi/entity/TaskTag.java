@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Entity
 @Getter
 @Setter
+@Table(name = "task_tag")
 public class TaskTag {
     @EmbeddedId
     private Pk pk;
