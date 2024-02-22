@@ -33,13 +33,11 @@ public class LoginController {
     @PostMapping("/login")
     public String tryToLogin(@ModelAttribute LoginRequest loginRequest, HttpServletRequest httpServletRequest, Model model) throws Exception {
 
-        //accountDto 받아와서
-//        AccountDto accountDto = accountService.getAccount(loginRequest);
-//
-//        if (Objects.isNull(accountDto)) {
-//            return "redirect:/login";
-//        }
-        AccountDto accountDto = AccountDto.builder().userId("id1").userEmail("email1").build();
+        AccountDto accountDto = accountService.getAccount(loginRequest);
+
+        if (Objects.isNull(accountDto)) {
+            return "redirect:/login";
+        }
 
         HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute("userId", accountDto.getUserId());
