@@ -1,15 +1,15 @@
 package com.nhnacademy.minidooray.accountapi.domain;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @NoArgsConstructor
-@Entity
 @Table(name = "Accounts")
 public class Account {
 
