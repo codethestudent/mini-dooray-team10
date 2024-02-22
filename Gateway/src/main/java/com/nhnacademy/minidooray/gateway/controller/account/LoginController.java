@@ -7,6 +7,7 @@ import com.nhnacademy.minidooray.gateway.service.account.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,7 +32,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String tryToLogin(@ModelAttribute LoginRequest loginRequest, HttpServletRequest httpServletRequest, Model model) throws Exception {
+    public String tryToLogin(@ModelAttribute LoginRequest loginRequest, BindingResult bindingResult, HttpServletRequest httpServletRequest, Model model) throws Exception {
 
         AccountDto accountDto = accountService.getAccount(loginRequest);
 
@@ -42,10 +43,18 @@ public class LoginController {
         HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute("userId", accountDto.getUserId());
         session.setAttribute("account",accountDto);
+        session.setMaxInactiveInterval(2*60*60);
 
         model.addAttribute("account", accountDto);
         return "dooray";
     }
 
+    @GetMapping("/logout")
+    public String tryToLogout(HttpSession session) {
+
+        session.invalidate();
+
+        return "redirect:/login";
+    }
 
 }
