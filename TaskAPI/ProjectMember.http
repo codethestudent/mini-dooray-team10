@@ -1,0 +1,31 @@
+GET http://localhost:8080/api/project/1/member
+
+###
+
+GET http://localhost:8080/api/project/1/member/2
+
+###
+
+POST http://localhost:8080/api/project/1/member
+Content-Type: application/json
+
+{
+  "userId": "test user3",
+  "projectId":1
+}
+
+###
+
+DELETE http://localhost:8080/api/project/1/member/1
+
+###
+
+PUT http://localhost:8080/api/project/1/member/1
+Content-Type: application/json
+
+{
+  "userId": "수정됨 test user",
+  "projectId":1
+}
+
+###

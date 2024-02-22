@@ -1,0 +1,33 @@
+GET http://localhost:8080/api/project
+
+###
+
+GET http://localhost:8080/api/project/1
+
+###
+
+POST http://localhost:8080/api/project
+Content-Type: application/json
+
+{
+  "projectName": "example project",
+  "projectDescription": "example project입니다.",
+  "adminId": "userId"
+}
+
+###
+
+PUT http://localhost:8080/api/project/3
+Content-Type: application/json
+
+{
+  "projectName": "수정된 example project edited",
+  "projectDescription": "수정된 example project입니다.",
+  "adminId": "userId"
+}
+
+###
+
+DELETE http://localhost:8080/api/project/1
+
+###

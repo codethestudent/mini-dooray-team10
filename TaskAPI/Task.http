@@ -1,0 +1,40 @@
+GET http://localhost:8080/api/project/1/task
+
+###
+
+GET http://localhost:8080/api/project/1/task/3
+
+###
+
+POST http://localhost:8080/api/project/1/task
+Content-Type: application/json
+
+{
+  "taskName": "example project",
+  "deadLine": "2023-03-19 00:00:00",
+  "content": "this is content of this task",
+  "projectId": 1,
+  "mileStoneId": 1,
+  "userId": "userId"
+}
+
+###
+
+DELETE http://localhost:8080/api/project/1/task/4
+
+###
+
+PUT http://localhost:8080/api/project/1/task/13
+Content-Type: application/json
+
+{
+  "taskName": "example project edited",
+  "deadLine": "2023-03-19 00:00:00",
+  "content": "this is content of this edited task",
+  "projectId": 1,
+  "milestoneId": 9,
+  "userId": "userId"
+}
+
+###
+
