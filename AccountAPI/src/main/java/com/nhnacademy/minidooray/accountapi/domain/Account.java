@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.accountapi.domain;
 
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -20,6 +21,7 @@ public class Account {
     private String userEmail;
 
     @Enumerated(EnumType.STRING)
+    @Nullable
     private UserState userState;
 
     public Account(String userId, String userPassword, String userEmail, UserState userState) {
@@ -27,5 +29,11 @@ public class Account {
         this.userPassword = userPassword;
         this.userEmail = userEmail;
         this.userState = userState;
+    }
+
+    public Account(String userId, String userPassword, String userEmail) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userEmail = userEmail;
     }
 }

@@ -1,9 +1,9 @@
 package com.nhnacademy.minidooray.accountapi.controller;
 
-import com.nhnacademy.minidooray.accountapi.domain.Account;
-import com.nhnacademy.minidooray.accountapi.domain.UserState;
+import com.nhnacademy.minidooray.accountapi.domain.*;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@Slf4j
 public class AccountController {
 
     private final AccountService accountService;
@@ -48,28 +49,47 @@ public class AccountController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
+    public ResponseEntity<AccountRequest> createAccount(@RequestBody CreateAccountRequest account) {
         accountService.createAccount(account);
-        return ResponseEntity.status(HttpStatus.CREATED).body(account);
+
+        String userId = account.getUserId();
+        String userEmail = account.getUserEmail();
+
+        AccountRequest accountRequest = new AccountRequest(userId, userEmail, UserState.ACTIVE);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(accountRequest);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Account> loginAccount(@RequestBody Account account) {
-        boolean loggedIn = accountService.login(account.getUserId(), account.getUserPassword());
+    public ResponseEntity<Account> loginAccount(@RequestBody LoginRequest account) {
+        log.info("account id is :{} ",account);
+        boolean loggedIn = accountService.login(account.getId());
 
         if (loggedIn) {
-            Account loginAccount = accountService.getAccount(account.getUserId());
+            Account loginAccount = accountService.getAccount(account.getId());
+            log.info("loginAccount send content is :{}", loginAccount);
             return ResponseEntity.ok(loginAccount);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Account> updateUserState (@RequestBody Account account, UserState userState) {
-        Account target = accountService.getAccount(account.getUserId());
+    @PostMapping("/update/disabled")
+    public ResponseEntity<Account> updateUserStateDisabled (@RequestBody String accountId) {
+        Account target = accountService.getAccount(accountId);
         if (target != null) {
-            accountService.updateUserState(target.getUserId(), userState);
+            accountService.updateUserState(target.getUserId(), UserState.DISABLED);
+            return ResponseEntity.status(HttpStatus.OK).body(target);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PostMapping("/update/active")
+    public ResponseEntity<Account> updateUserStateActive (@RequestBody String accountId) {
+        Account target = accountService.getAccount(accountId);
+        if (target != null) {
+            accountService.updateUserState(target.getUserId(), UserState.ACTIVE);
             return ResponseEntity.status(HttpStatus.OK).body(target);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

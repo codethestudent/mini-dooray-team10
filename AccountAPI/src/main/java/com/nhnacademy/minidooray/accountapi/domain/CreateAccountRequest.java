@@ -1,16 +1,12 @@
 package com.nhnacademy.minidooray.accountapi.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-@AllArgsConstructor
-public class AccountRequest {
+public class CreateAccountRequest {
     private String userId;
-
+    private String userPassword;
     private String userEmail;
-
-    private UserState userState;
 }

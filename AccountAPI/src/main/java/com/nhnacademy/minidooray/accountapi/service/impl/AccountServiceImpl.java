@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.accountapi.service.impl;
 
 import com.nhnacademy.minidooray.accountapi.domain.Account;
+import com.nhnacademy.minidooray.accountapi.domain.CreateAccountRequest;
 import com.nhnacademy.minidooray.accountapi.domain.UserState;
 import com.nhnacademy.minidooray.accountapi.repository.AccountRepository;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
@@ -30,11 +31,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createAccount(Account account) {
+    public Account createAccount(CreateAccountRequest account) {
         if (accountRepository.existsById(account.getUserId())) {
             throw new IllegalArgumentException("id : " + account.getUserId() + "는 이미 존재합니다.");
         }
-        return accountRepository.save(account);
+        String newUserId = account.getUserId();
+        String newUserPassword = account.getUserPassword();
+        String newUserEmail = account.getUserEmail();
+        Account newUser = new Account(newUserId, newUserPassword, newUserEmail, UserState.ACTIVE);
+        return accountRepository.save(newUser);
     }
 
     @Override
@@ -47,9 +52,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean login(String accountId, String accountPassword) {
+    public boolean login(String accountId) {
         Account account = accountRepository.findById(accountId).orElse(null);
-        if (account != null && account.getUserPassword().equals(accountPassword)) {
+        if (account != null) {
             return true;
         }
         return false;
