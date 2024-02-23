@@ -6,7 +6,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class CreateAccountRequest {
-    private String userId;
-    private String userPassword;
-    private String userEmail;
+    private String id;
+    private String password;
+    private String email;
 }

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,9 +22,14 @@ public class AccountController {
 
     private final AccountService accountService;
 
+    /**
+     * userId를 가지고 Db에서 데이터를 반환한다. (단일)
+     * GetMapping
+     * @param userId
+     * @return
+     */
     @GetMapping("/get/user")
-    public ResponseEntity<Account> getAccount(HttpSession httpSession) {
-        String userId = (String) httpSession.getAttribute("user");
+    public ResponseEntity<Account> getAccount(String userId) {
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         } else {
@@ -32,9 +38,18 @@ public class AccountController {
         }
     }
 
+    /**
+     * userState가 ACTIVE인 사람만 List에 담아서 보내준다.
+     *
+     * @return accountList
+     */
     @GetMapping("/get/users")
     public ResponseEntity<List<Account>> getAccounts() {
-        List<Account> accountList = accountService.getAccounts();
+        List<Account> accountList = accountService.getAccounts()
+                .stream()
+                .filter(account -> UserState.ACTIVE.equals(account.getUserState()))
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(accountList);
     }
 
@@ -50,10 +65,10 @@ public class AccountController {
 
     @PostMapping("/create")
     public ResponseEntity<AccountRequest> createAccount(@RequestBody CreateAccountRequest account) {
+        log.info("accout context :{}", account);
         accountService.createAccount(account);
-
-        String userId = account.getUserId();
-        String userEmail = account.getUserEmail();
+        String userId = account.getId();
+        String userEmail = account.getEmail();
 
         AccountRequest accountRequest = new AccountRequest(userId, userEmail, UserState.ACTIVE);
 
@@ -67,33 +82,32 @@ public class AccountController {
 
         if (loggedIn) {
             Account loginAccount = accountService.getAccount(account.getId());
-            log.info("loginAccount send content is :{}", loginAccount);
+            log.info("loginAccount send content is :{}", loginAccount.toString());
             return ResponseEntity.ok(loginAccount);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @PostMapping("/update/disabled")
-    public ResponseEntity<Account> updateUserStateDisabled (@RequestBody String accountId) {
+    @PutMapping("/update/disabled/{id}")
+    public ResponseEntity<AccountRequest> updateUserStateDisabled (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
-        if (target != null) {
-            accountService.updateUserState(target.getUserId(), UserState.DISABLED);
-            return ResponseEntity.status(HttpStatus.OK).body(target);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.DISABLED);
+        return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
 
-    @PostMapping("/update/active")
-    public ResponseEntity<Account> updateUserStateActive (@RequestBody String accountId) {
+    @PutMapping("/update/active/{id}")
+    public ResponseEntity<AccountRequest> updateUserStateActive (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
-        if (target != null) {
-            accountService.updateUserState(target.getUserId(), UserState.ACTIVE);
-            return ResponseEntity.status(HttpStatus.OK).body(target);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.ACTIVE);
+        return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
+    }
+    //WITHDRAWAL
+    @PutMapping("/udate/withdrawal/{id}")
+    public ResponseEntity<AccountRequest> updateUserStateWithdrawal (@PathVariable("id") String accountId) {
+        Account target = accountService.getAccount(accountId);
+        AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.WITHDRAWAL);
+        return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
 
 //    @GetMapping("/logout")

@@ -5,12 +5,14 @@ import com.nhnacademy.minidooray.accountapi.domain.CreateAccountRequest;
 import com.nhnacademy.minidooray.accountapi.domain.UserState;
 import com.nhnacademy.minidooray.accountapi.repository.AccountRepository;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
 
     AccountRepository accountRepository;
@@ -31,14 +33,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account createAccount(CreateAccountRequest account) {
-        if (accountRepository.existsById(account.getUserId())) {
-            throw new IllegalArgumentException("id : " + account.getUserId() + "는 이미 존재합니다.");
+    public Account createAccount( CreateAccountRequest account) {
+        log.info("Create account address is :{}" , account);
+        if (accountRepository.existsById(account.getId())) {
+            throw new IllegalArgumentException("id : " + account.getId() + "는 이미 존재합니다.");
         }
-        String newUserId = account.getUserId();
-        String newUserPassword = account.getUserPassword();
-        String newUserEmail = account.getUserEmail();
+
+        String newUserId = account.getId();
+        String newUserPassword = account.getPassword();
+        String newUserEmail = account.getEmail();
+
         Account newUser = new Account(newUserId, newUserPassword, newUserEmail, UserState.ACTIVE);
+
         return accountRepository.save(newUser);
     }
 

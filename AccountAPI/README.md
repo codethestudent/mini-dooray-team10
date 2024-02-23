@@ -28,10 +28,7 @@ RestController
 		"userEmail": "user@email.com", 
 		"userState": "LOGIN" 
 	}
-		,
-   {
-      //    
-   }
+		, // 추가적인 계정 정보... 
 ]
 ```
 
@@ -70,7 +67,7 @@ RestController
 }
 ```
 
-## 5. endpoint : /login
+## 5. endpoint : POST /login
 ---
 - 사용자 로그인
 - Request ->
@@ -92,7 +89,7 @@ RestController
 
 - error : 404 not found
 
-## endpoint : /update
+## endpoint : PUT /update/disabled/{id}
 ---
 - 사용자의 상태 업데이트
 - Request ->
@@ -114,4 +111,48 @@ RestController
 }
 ```
 
-- error : 404 not found
+
+## endpoint : PUT /update/active/{id}
+---
+- 사용자의 상태 업데이트
+- Request ->
+```json
+{
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "DISABLED"
+}
+```
+- Response : 200 OK
+```json
+{
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "ACTIVE"
+}
+```
+
+
+## endpoint : PUT /update/withdrawal/{id}
+---
+- 사용자의 상태 업데이트
+- Request ->
+```json
+{
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "ACTIVE" or "DISABLED"
+}
+```
+- Response : 200 OK
+```json
+{
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "WITHDRAWAL"
+}
+```
