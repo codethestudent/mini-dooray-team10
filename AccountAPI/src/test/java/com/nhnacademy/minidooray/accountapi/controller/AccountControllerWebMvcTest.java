@@ -36,14 +36,11 @@ class AccountControllerWebMvcTest {
 
     @Test
     @Order(1)
-    void getAccount() throws Exception {
+    void getAccount() throws Exception {;
 
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("user", "test");
+        given(accountService.getAccount("test")).willReturn(new Account("test", "12345", "123@123.com", UserState.ACTIVE));
 
-        given(accountService.getAccount("test")).willReturn(new Account("test", "12345", "123@123.com", UserState.LOGOUT));
-
-        mockMvc.perform(get("/user/get/user").session(session))
+        mockMvc.perform(get("/user/get/user"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userId").value("test"));
@@ -64,7 +61,7 @@ class AccountControllerWebMvcTest {
         MockHttpSession session = new MockHttpSession();
         session.setAttribute("user", "test");
 
-        given(accountService.getAccounts()).willReturn(List.of(new Account("test", "12345", "123@123.com", UserState.LOGOUT)));
+        given(accountService.getAccounts()).willReturn(List.of(new Account("test", "12345", "123@123.com", UserState.DISABLED)));
 
         mockMvc.perform(get("/user/get/users").session(session))
                 .andExpect(status().isOk())
@@ -76,7 +73,7 @@ class AccountControllerWebMvcTest {
     @Test
     @Order(4)
     void testCreateAccount() throws Exception {
-        Account init = new Account("test", "12345", "123@1.com", UserState.NON_MEMBER);
+        Account init = new Account("test", "12345", "123@1.com", UserState.ACTIVE);
 
         ObjectMapper objectMapper = new ObjectMapper();
 

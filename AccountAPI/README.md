@@ -1,4 +1,4 @@
-# Account Api
+
 
 ---
 RestController
@@ -6,7 +6,6 @@ RestController
 ### defaultMapping = /user
 ## 1. endpoint : GET /get/user
 ---
-- session에서 사용자 아이디를 확인하고, 인증되지 않은 경우 401 반환.
 - Response : 200 OK
 ```
 {
@@ -29,7 +28,10 @@ RestController
 		"userEmail": "user@email.com", 
 		"userState": "LOGIN" 
 	}
-		, // 추가적인 계정 정보... 
+		,
+   {
+      //    
+   }
 ]
 ```
 
@@ -90,13 +92,26 @@ RestController
 
 - error : 404 not found
 
-## endpoint : /logout
+## endpoint : /update
 ---
-- 사용자 로그아웃
-- Response ->
+- 사용자의 상태 업데이트
+- Request ->
 ```json
 {
-	"result_code" : 0
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "ACTIVE"
+}
+```
+- Response : 200 OK
+```json
+{
+	"userId" : "user_01",
+	"userPassword" : "userPassword",
+	"userEmail" : "user@Email.com",
+	"userState" : "DISABLED"
 }
 ```
 
+- error : 404 not found

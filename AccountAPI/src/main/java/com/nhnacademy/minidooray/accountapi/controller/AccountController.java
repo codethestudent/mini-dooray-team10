@@ -68,8 +68,12 @@ public class AccountController {
     @PostMapping("/update")
     public ResponseEntity<Account> updateUserState (@RequestBody Account account, UserState userState) {
         Account target = accountService.getAccount(account.getUserId());
-        accountService.updateUserState(target.getUserId(), userState);
-        return ResponseEntity.status(HttpStatus.OK).body(target);
+        if (target != null) {
+            accountService.updateUserState(target.getUserId(), userState);
+            return ResponseEntity.status(HttpStatus.OK).body(target);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
 //    @GetMapping("/logout")

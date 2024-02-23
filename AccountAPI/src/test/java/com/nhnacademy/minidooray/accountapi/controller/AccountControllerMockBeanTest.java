@@ -36,35 +36,30 @@ class AccountControllerMockBeanTest {
     @Order(1)
     void getAccount() throws Exception {
 
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("user", "test");
+        given(accountRepository.findById("test")).willReturn(Optional.of(new Account("test", "12345", "123@123.com", UserState.DISABLED)));
 
-        given(accountRepository.findById("test")).willReturn(Optional.of(new Account("test", "12345", "123@123.com", UserState.LOGOUT)));
-
-        mockMvc.perform(get("/user/get/user").session(session))
+        mockMvc.perform(get("/user/get/user"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userId", equalTo("test")));
     }
 
-    @Test
-    @Order(2)
-    void getAccountError() throws Exception {
-        MockHttpSession session = new MockHttpSession();
-
-        mockMvc.perform(get("/user/get/user").session(session))
-                .andExpect(status().is4xxClientError());
-    }
+//    @Test
+//    @Order(2)
+//    void getAccountError() throws Exception {
+//        MockHttpSession session = new MockHttpSession();
+//
+//        mockMvc.perform(get("/user/get/user").session(session))
+//                .andExpect(status().is4xxClientError());
+//    }
 
     @Test
     @Order(3)
     void getAccounts() throws Exception {
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("user", "test");
 
-        given(accountRepository.findAll()).willReturn(List.of(new Account("test", "12345", "123@123.com", UserState.LOGOUT)));
+        given(accountRepository.findAll()).willReturn(List.of(new Account("test", "12345", "123@123.com", UserState.DISABLED)));
 
-        mockMvc.perform(get("/user/get/users").session(session))
+        mockMvc.perform(get("/user/get/users"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].userId", equalTo("test")));
@@ -74,7 +69,7 @@ class AccountControllerMockBeanTest {
     @Test
     @Order(4)
     void testCreateAccount() throws Exception {
-        Account init = new Account("test", "12345", "123@1.com", UserState.NON_MEMBER);
+        Account init = new Account("test", "12345", "123@1.com", UserState.DISABLED);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
