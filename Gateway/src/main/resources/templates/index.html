@@ -6,17 +6,18 @@
 </head>
 <body>
 <div>
-    <h1><a th:href="|/${loginType}|">[[${pageName}]]</a></h1> <hr/>
-    <div th:if="${nickname == null}">
+    <div th:if="${session.userId == null or session.userId == ''}">
         <h3>로그인 되어있지 않습니다!</h3>
-        <a href="">회원가입</a> <br/><br/>
+        <a href="/account/signup">회원가입</a> <br/><br/>
         <a href="/account/login">로그인</a>
     </div>
-    <div th:unless="${nickname == null}">
+    <div th:unless="${session.userId == null or session.userId ==''}">
+        <span th:text="${session.userId}"></span>
         <h3>[[${nickname}]]님 환영합니다!</h3>
+
         <button th:onclick="|location.href='@{/{loginType}/info (loginType=${loginType})}'|">유저 정보</button> <br/><br/>
         <button th:onclick="|location.href='@{/{loginType}/admin (loginType=${loginType})}'|">관리자 페이지</button> <br/><br/>
-        <button th:onclick="|location.href='@{/{loginType}/logout (loginType=${loginType})}'|">로그아웃</button>
+        <a href="account/logout">로그아웃</a>
     </div>
 </div>
 </body>
