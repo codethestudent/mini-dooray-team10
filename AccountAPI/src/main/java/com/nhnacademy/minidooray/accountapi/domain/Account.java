@@ -2,15 +2,13 @@ package com.nhnacademy.minidooray.accountapi.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@Table(name = "Accounts")
+@Table(name = "Account")
 @Entity
 public class Account {
 
@@ -21,6 +19,7 @@ public class Account {
 
     private String userEmail;
 
+    @Enumerated(EnumType.STRING)
     private UserState userState;
 
     public Account(String userId, String userPassword, String userEmail, UserState userState) {
