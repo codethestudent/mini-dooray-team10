@@ -93,6 +93,7 @@ public class AccountController {
     public ResponseEntity<AccountRequest> updateUserStateDisabled (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
         AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.DISABLED);
+        accountService.updateUserState(targetAccount.getUserId(), UserState.DISABLED);
         return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
 
@@ -100,6 +101,7 @@ public class AccountController {
     public ResponseEntity<AccountRequest> updateUserStateActive (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
         AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.ACTIVE);
+        accountService.updateUserState(targetAccount.getUserId(), UserState.ACTIVE);
         return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
     //WITHDRAWAL
@@ -107,6 +109,7 @@ public class AccountController {
     public ResponseEntity<AccountRequest> updateUserStateWithdrawal (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
         AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.WITHDRAWAL);
+        accountService.updateUserState(targetAccount.getUserId(), UserState.WITHDRAWAL);
         return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
 
