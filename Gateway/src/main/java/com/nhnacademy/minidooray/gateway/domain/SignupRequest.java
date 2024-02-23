@@ -1,15 +1,17 @@
 package com.nhnacademy.minidooray.gateway.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
+// todo ToString 지우기
 @Getter
 @Setter
-public class LoginRequest {
+@ToString
+public class SignupRequest {
 
     private String id;
     private String password;
+    private String email;
 
 }
