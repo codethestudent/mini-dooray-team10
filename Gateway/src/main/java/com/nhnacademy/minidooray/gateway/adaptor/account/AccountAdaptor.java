@@ -10,4 +10,10 @@ public interface AccountAdaptor {
 
     AccountDto createUser(SignupRequest signupRequest);
 
+    AccountDto updateStateToDisable(String id);
+
+    AccountDto updateStateToActive(String id);
+
+    AccountDto deleteUser(String id);
+
 }

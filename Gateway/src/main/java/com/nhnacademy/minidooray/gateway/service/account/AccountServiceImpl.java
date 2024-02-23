@@ -25,5 +25,19 @@ public class AccountServiceImpl implements AccountService {
         return accountAdaptor.createUser(signupRequest);
     }
 
+    @Override
+    public AccountDto updateDisable(String id) {
+        return accountAdaptor.updateStateToDisable(id);
+    }
+
+    public AccountDto updateActive(String id) {
+        return accountAdaptor.updateStateToActive(id);
+    }
+
+    @Override
+    public AccountDto deleteUser(String id) {
+        return accountAdaptor.deleteUser(id);
+    }
+
 
 }

@@ -33,11 +33,6 @@ public class LoginController {
     }
 
 
-    @GetMapping("/signup")
-    public String getLoginForm() {
-        return "signup";
-    }
-
     @PostMapping("/login")
     public String tryToLogin(@ModelAttribute LoginRequest loginRequest, BindingResult bindingResult, HttpServletRequest httpServletRequest, Model model, RedirectAttributes redirectAttributes) throws Exception {
 

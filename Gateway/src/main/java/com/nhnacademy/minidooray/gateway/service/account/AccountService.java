@@ -10,4 +10,9 @@ public interface AccountService {
 
     AccountDto createAccount(SignupRequest signupRequest);
 
+    AccountDto updateDisable(String id);
+
+    AccountDto updateActive(String id);
+
+    AccountDto deleteUser(String id);
 }

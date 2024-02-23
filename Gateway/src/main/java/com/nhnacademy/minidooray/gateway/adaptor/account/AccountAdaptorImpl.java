@@ -5,7 +5,6 @@ import com.nhnacademy.minidooray.gateway.domain.AccountDto;
 import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
 import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +37,6 @@ public class AccountAdaptorImpl implements AccountAdaptor{
                 HttpMethod.POST,
                 requestHttpEntity,
                 AccountDto.class);
-
         if(!respEntity.getStatusCode().equals(HttpStatus.OK)) {
             throw new RuntimeException();
         }
@@ -66,4 +64,64 @@ public class AccountAdaptorImpl implements AccountAdaptor{
 
         return respEntity.getBody();
     }
+
+    @Override
+    public AccountDto updateStateToDisable(String id) {
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        log.info("{}", accountAdatptorProperties.getUrlName() + "/update/dsiabled/"+id);
+
+        HttpEntity<String> requestHttpEntity = new HttpEntity<>(id, httpHeaders);
+        ResponseEntity<AccountDto> respEntity = restTemplate.exchange(
+                accountAdatptorProperties.getUrlName() + "/user/update/disabled/" + id,
+                HttpMethod.PUT,
+                requestHttpEntity,
+                AccountDto.class,
+                id
+        );
+        if(!respEntity.getStatusCode().equals(HttpStatus.OK)) throw new RuntimeException();
+        return respEntity.getBody();
+    }
+
+    @Override
+    public AccountDto updateStateToActive(String id) {
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestHttpEntity = new HttpEntity<>(id, httpHeaders);
+        ResponseEntity<AccountDto> respEntity = restTemplate.exchange(
+                accountAdatptorProperties.getUrlName() + "/user/update/active/" + id,
+                HttpMethod.PUT,
+                requestHttpEntity,
+                AccountDto.class,
+                id
+        );
+        if(!respEntity.getStatusCode().equals(HttpStatus.OK)) throw new RuntimeException();
+        return respEntity.getBody();
+    }
+
+    @Override
+    public AccountDto deleteUser(String id) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestHttpEntity = new HttpEntity<>(id, httpHeaders);
+        ResponseEntity<AccountDto> respEntity = restTemplate.exchange(
+                accountAdatptorProperties.getUrlName() + "/user/update/withdrawal/" + id,
+                HttpMethod.PUT,
+                requestHttpEntity,
+                AccountDto.class,
+                id
+        );
+        if(!respEntity.getStatusCode().equals(HttpStatus.OK)) throw new RuntimeException();
+        return respEntity.getBody();
+    }
+
+
 }
