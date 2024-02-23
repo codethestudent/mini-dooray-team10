@@ -46,34 +46,31 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    /**
-     *  userState : LOGIN, LOGOUT, DORMANT
-     * @param accountId : 계정 id.
-     * @param userState : 조정할 유저 상태.
-     */
-    @Override
-    public void dormantAccount(String accountId, UserState userState) {
-        Account account = accountRepository.findById(accountId).orElse(null);
-        if (account != null) {
-            account.setUserState(userState);
-            accountRepository.save(account);
-        } else {
-            throw new IllegalArgumentException("id : " + accountId +" 를 찾을 수 없습니다. 계정 정보의 수정이 실패했습니다.");
-        }
-    }
-
     @Override
     public boolean login(String accountId, String accountPassword) {
         Account account = accountRepository.findById(accountId).orElse(null);
-        if (account != null && account.getUserPassword().equals(accountPassword) && account.getUserState().equals(UserState.DORMANT)) {
-            dormantAccount(accountId, UserState.LOGIN);
+        if (account != null && account.getUserPassword().equals(accountPassword)) {
             return true;
         }
         return false;
     }
 
     @Override
-    public void logout(String accountId) {
-        dormantAccount(accountId, UserState.LOGOUT);
+    public void updateUserState(String accountId, UserState userState) {
+        Account account = accountRepository.findById(accountId).orElse(null);
+        if (account != null) {
+            account.setUserState(userState);
+            accountRepository.save(account);
+        } else {
+            throw new IllegalArgumentException("user id : " + accountId + "는 존재하지 않는 id 입니다. 상태 변경에 실패하였습니다.");
+        }
     }
+
+//    @Override
+//    public void logout(String accountId) {
+//        Account account = accountRepository.findById(accountId).orElse(null);
+//        if (account != null) {
+//
+//        }
+//    }
 }

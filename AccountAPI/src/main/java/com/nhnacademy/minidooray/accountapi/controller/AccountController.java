@@ -1,6 +1,7 @@
 package com.nhnacademy.minidooray.accountapi.controller;
 
 import com.nhnacademy.minidooray.accountapi.domain.Account;
+import com.nhnacademy.minidooray.accountapi.domain.UserState;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -53,23 +54,30 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Account> loginAccount(@RequestBody Account account, HttpSession httpSession) {
+    public ResponseEntity<Account> loginAccount(@RequestBody Account account) {
         boolean loggedIn = accountService.login(account.getUserId(), account.getUserPassword());
 
         if (loggedIn) {
-            httpSession.setAttribute("user", account.getUserId());
-            return ResponseEntity.ok(account);
+            Account loginAccount = accountService.getAccount(account.getUserId());
+            return ResponseEntity.ok(loginAccount);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<Map<String, Integer>> logout (HttpSession httpSession) {
-        httpSession.invalidate();
-        Map<String, Integer> response = new HashMap<>();
-        response.put("result_code", 0);
-
-        return ResponseEntity.ok(response);
+    @PostMapping("/update")
+    public ResponseEntity<Account> updateUserState (@RequestBody Account account, UserState userState) {
+        Account target = accountService.getAccount(account.getUserId());
+        accountService.updateUserState(target.getUserId(), userState);
+        return ResponseEntity.status(HttpStatus.OK).body(target);
     }
+
+//    @GetMapping("/logout")
+//    public ResponseEntity<Map<String, Integer>> logout (HttpSession httpSession) {
+//        httpSession.invalidate();
+//        Map<String, Integer> response = new HashMap<>();
+//        response.put("result_code", 0);
+//
+//        return ResponseEntity.ok(response);
+//    }
 }

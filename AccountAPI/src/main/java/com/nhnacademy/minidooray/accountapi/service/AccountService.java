@@ -14,9 +14,10 @@ public interface AccountService {
 
     void deleteAccount (String accountId);
 
-    void dormantAccount (String accountId, UserState userState);
+//    void dormantAccount (String accountId, UserState userState);
 
     boolean login (String accountId, String accountPassword);
 
-    void logout (String accountId);
+//    void logout (String accountId);
+    void updateUserState (String accountId, UserState userState);
 }
