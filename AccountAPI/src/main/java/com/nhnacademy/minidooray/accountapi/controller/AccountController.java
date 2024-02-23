@@ -82,8 +82,12 @@ public class AccountController {
 
         if (loggedIn) {
             Account loginAccount = accountService.getAccount(account.getId());
-            log.info("loginAccount send content is :{}", loginAccount.toString());
-            return ResponseEntity.ok(loginAccount);
+            if (loginAccount.getUserState() != UserState.WITHDRAWAL) {
+                log.info("loginAccount send content is :{}", loginAccount.toString());
+                return ResponseEntity.ok(loginAccount);
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+            }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -105,7 +109,7 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
     //WITHDRAWAL
-    @PutMapping("/udate/withdrawal/{id}")
+    @PutMapping("/update/withdrawal/{id}")
     public ResponseEntity<AccountRequest> updateUserStateWithdrawal (@PathVariable("id") String accountId) {
         Account target = accountService.getAccount(accountId);
         AccountRequest targetAccount = new AccountRequest(target.getUserId(), target.getUserEmail(), UserState.WITHDRAWAL);
