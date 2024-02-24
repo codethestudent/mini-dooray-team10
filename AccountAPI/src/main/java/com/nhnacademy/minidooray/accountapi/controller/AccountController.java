@@ -26,6 +26,7 @@ public class AccountController {
 
     /**
      * userId를 가지고 Db에서 데이터를 반환한다. (단일)
+     * <p>
      * GetMapping
      * @param userId
      * @return
@@ -42,7 +43,6 @@ public class AccountController {
 
     /**
      * userState가 ACTIVE인 사람만 List에 담아서 보내준다.
-     *
      * @return accountList
      */
     @GetMapping("/get/users")
@@ -79,6 +79,7 @@ public class AccountController {
 
     /**
      * 회원 탈퇴 상태 : User Deactivated 403 Forbidden
+     * <p>
      * 계정이 존재하지 않음 : Invalid Credentials 404 Not Found
      *
      * @param account

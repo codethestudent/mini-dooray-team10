@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * 예외 처리 4종. handling
+ * <p>
+ * ID가 이미 존재할 때, ID를 찾을 수 없을 때, ID 혹은 Password가 일치하지 않을 때, 회원 탈퇴한 계정일 때.
+ */
 @Slf4j
 @ControllerAdvice
 public class CommonAdvice {
