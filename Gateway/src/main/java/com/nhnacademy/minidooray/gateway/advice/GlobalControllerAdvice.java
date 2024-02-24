@@ -1,18 +1,10 @@
 package com.nhnacademy.minidooray.gateway.advice;
 
-import com.nhnacademy.minidooray.gateway.exception.HandleAuthenticationFailureException;
 import com.nhnacademy.minidooray.gateway.exception.HandleDuplicateIdException;
-import com.nhnacademy.minidooray.gateway.exception.HandleUserIdNotFoundException;
-import com.nhnacademy.minidooray.gateway.exception.HandleUserWithdrawalException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Slf4j
