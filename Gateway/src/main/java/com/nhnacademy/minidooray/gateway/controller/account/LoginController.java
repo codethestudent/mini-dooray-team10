@@ -2,7 +2,6 @@ package com.nhnacademy.minidooray.gateway.controller.account;
 
 import com.nhnacademy.minidooray.gateway.domain.AccountDto;
 import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
 import com.nhnacademy.minidooray.gateway.service.account.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,7 +27,8 @@ public class LoginController {
     }
 
     @GetMapping("/login")
-    public String getLogin() {
+    public String getLogin(Model model) {
+        log.info("redirect message:{}", model.getAttribute("message"));
         return "login";
     }
 
@@ -59,8 +59,6 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String tryToLogout(HttpServletRequest request, @CookieValue("JSESSIONID") Cookie cookie) {
-
-        //todo 로그인 or 로그아웃 시간 추가해야하나?
 
         HttpSession session = request.getSession(false);
 

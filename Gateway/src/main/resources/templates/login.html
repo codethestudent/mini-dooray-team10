@@ -5,13 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-    <header>
-<!--        <div th:if="${ != null or message != ''}" th:text="${message}"></div>-->
-    </header>
     <div class="wrapper">
         <div class="container">
             <h1>Welcome</h1>
-
+            <h2 th:text="${message}"></h2>
             <form class="loginForm" action="/account/login" method="post">
                 <input type="text" id="id" name="id" placeholder="ID">
                 <input type="password" id="password" name="password" placeholder="Password">

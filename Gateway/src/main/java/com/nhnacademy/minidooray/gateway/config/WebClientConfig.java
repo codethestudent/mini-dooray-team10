@@ -15,6 +15,7 @@ public class WebClientConfig {
         return builder
                 .setReadTimeout(Duration.ofSeconds(5L))
                 .setConnectTimeout(Duration.ofSeconds(3L))
+                //.errorHandler()
                 .build();
     }
 
