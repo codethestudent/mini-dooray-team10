@@ -3,6 +3,8 @@ package com.nhnacademy.minidooray.accountapi.service.impl;
 import com.nhnacademy.minidooray.accountapi.domain.Account;
 import com.nhnacademy.minidooray.accountapi.domain.CreateAccountRequest;
 import com.nhnacademy.minidooray.accountapi.domain.UserState;
+import com.nhnacademy.minidooray.accountapi.exception.AccountIdAlreadyExistException;
+import com.nhnacademy.minidooray.accountapi.exception.AccountIdNotFoundExcption;
 import com.nhnacademy.minidooray.accountapi.repository.AccountRepository;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccount( CreateAccountRequest account) {
         log.info("Create account address is :{}" , account);
         if (accountRepository.existsById(account.getId())) {
-            throw new IllegalArgumentException("id : " + account.getId() + "는 이미 존재합니다.");
+            throw new AccountIdAlreadyExistException(account.getId());
         }
 
         String newUserId = account.getId();
@@ -53,14 +55,14 @@ public class AccountServiceImpl implements AccountService {
         if (accountRepository.existsById(accountId)) {
             accountRepository.deleteById(accountId);
         } else {
-            throw new IllegalArgumentException("id :" + accountId + "를 찾을 수 없습니다. 삭제에 실패하였습니다.");
+            throw new AccountIdNotFoundExcption(accountId);
         }
     }
 
     @Override
-    public boolean login(String accountId) {
+    public boolean login(String accountId, String accountPassword) {
         Account account = accountRepository.findById(accountId).orElse(null);
-        if (account != null) {
+        if (account != null && account.getUserPassword().equals(accountPassword)) {
             return true;
         }
         return false;
@@ -73,15 +75,7 @@ public class AccountServiceImpl implements AccountService {
             account.setUserState(userState);
             accountRepository.save(account);
         } else {
-            throw new IllegalArgumentException("user id : " + accountId + "는 존재하지 않는 id 입니다. 상태 변경에 실패하였습니다.");
+            throw new AccountIdNotFoundExcption(accountId);
         }
     }
-
-//    @Override
-//    public void logout(String accountId) {
-//        Account account = accountRepository.findById(accountId).orElse(null);
-//        if (account != null) {
-//
-//        }
-//    }
 }

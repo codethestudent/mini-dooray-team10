@@ -1,6 +1,8 @@
 package com.nhnacademy.minidooray.accountapi.controller;
 
 import com.nhnacademy.minidooray.accountapi.domain.*;
+import com.nhnacademy.minidooray.accountapi.exception.InvalidCredentialsException;
+import com.nhnacademy.minidooray.accountapi.exception.UserDeactivatedException;
 import com.nhnacademy.minidooray.accountapi.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,10 +77,17 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.CREATED).body(accountRequest);
     }
 
+    /**
+     * 회원 탈퇴 상태 : User Deactivated 403 Forbidden
+     * 계정이 존재하지 않음 : Invalid Credentials 404 Not Found
+     *
+     * @param account
+     * @return
+     */
     @PostMapping("/login")
     public ResponseEntity<Account> loginAccount(@RequestBody LoginRequest account) {
         log.info("account id is :{} ",account);
-        boolean loggedIn = accountService.login(account.getId());
+        boolean loggedIn = accountService.login(account.getId(), account.getPassword());
 
         if (loggedIn) {
             Account loginAccount = accountService.getAccount(account.getId());
@@ -86,10 +95,10 @@ public class AccountController {
                 log.info("loginAccount send content is :{}", loginAccount.toString());
                 return ResponseEntity.ok(loginAccount);
             } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+                throw new UserDeactivatedException(account.getId());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            throw new InvalidCredentialsException(account.getId());
         }
     }
 
@@ -116,13 +125,4 @@ public class AccountController {
         accountService.updateUserState(targetAccount.getUserId(), UserState.WITHDRAWAL);
         return ResponseEntity.status(HttpStatus.OK).body(targetAccount);
     }
-
-//    @GetMapping("/logout")
-//    public ResponseEntity<Map<String, Integer>> logout (HttpSession httpSession) {
-//        httpSession.invalidate();
-//        Map<String, Integer> response = new HashMap<>();
-//        response.put("result_code", 0);
-//
-//        return ResponseEntity.ok(response);
-//    }
 }
