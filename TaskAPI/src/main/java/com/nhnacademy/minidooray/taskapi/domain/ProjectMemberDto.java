@@ -14,4 +14,9 @@ public class ProjectMemberDto {
         this.userId = projectMember.getPk().getUserId();
         this.projectId = projectMember.getPk().getProjectId();
     }
+
+    public ProjectMemberDto(String adminId, int projectId) {
+        this.userId = adminId;
+        this.projectId = projectId;
+    }
 }

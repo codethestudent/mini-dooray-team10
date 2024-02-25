@@ -1,13 +1,12 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 @Table(name = "tag")
 public class Tag {
     @Id
@@ -21,4 +20,7 @@ public class Tag {
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+
+    public Tag() {
+    }
 }

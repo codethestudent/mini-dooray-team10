@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
+import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
 import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
@@ -29,6 +30,19 @@ public class ProjectMemberService {
                 .collect(Collectors.toList());
     }
 
+    public List<ProjectDto> getProjects(String userId) {
+        List<ProjectMember> projectMembers = projectMemberRepository.findByPkUserId(userId);
+
+        List<Project> projects = projectMembers.stream()
+                .map(ProjectMember::getProject)
+                .distinct()
+                .toList();
+
+        return projects.stream()
+                .map(ProjectDto::new)
+                .collect(Collectors.toList());
+    }
+
     public ProjectMember getProjectMember(String userId, int projectId) {
         ProjectMember.Pk pk = new ProjectMember.Pk(userId, projectId);
         Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
@@ -38,7 +52,7 @@ public class ProjectMemberService {
         return projectMember.get();
     }
 
-    public ProjectMember createProjectMember(int projectId, ProjectMemberDto projectMemberDto) {
+    public ProjectMemberDto createProjectMember(int projectId, ProjectMemberDto projectMemberDto) {
         Optional<Project> project = projectRepository.findById(projectId);
         if (project.isEmpty()) {
             throw new EntityNotFoundException("Project id: " + projectId + " not found");
@@ -46,10 +60,14 @@ public class ProjectMemberService {
         ProjectMember.Pk pk = new ProjectMember.Pk(projectMemberDto.getUserId(), projectId);
         ProjectMember projectMember = new ProjectMember(pk, project.get());
 
-        if (projectMemberRepository.existsById(projectMember.getPk())) {
-            throw new EntityExistsException(projectMember.getPk() + " already exists");
+        if (projectMemberRepository.existsByPkUserIdAndPkProjectId(projectMemberDto.getUserId(), projectId)) {
+            throw new EntityExistsException(projectMember.getPk().getUserId() + ", " + projectId + " already exists");
         }
-        return projectMemberRepository.save(projectMember);
+        ProjectMember projectMember1 = projectMemberRepository.save(projectMember);
+        ProjectMemberDto projectMemberDto1 = new ProjectMemberDto();
+        projectMemberDto1.setUserId(projectMember1.getPk().getUserId());
+        projectMemberDto1.setProjectId(projectMember1.getProject().getProjectId());
+        return projectMemberDto1;
     }
 
     public ProjectMember updateProjectMember(ProjectMember projectMember) {
@@ -63,6 +81,7 @@ public class ProjectMemberService {
     public ResponseEntity<String> deleteProjectMember(int projectId, String userId) {
         ProjectMember.Pk pk = new ProjectMember.Pk(userId, projectId);
         if (projectMemberRepository.existsById(pk)) {
+            projectMemberRepository.deleteById(pk);
             return ResponseEntity.ok().body("ok");
         }
         return ResponseEntity.badRequest().build();

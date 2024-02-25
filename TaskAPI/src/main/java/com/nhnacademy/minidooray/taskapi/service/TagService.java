@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
+import com.nhnacademy.minidooray.taskapi.domain.TagDto;
 import com.nhnacademy.minidooray.taskapi.entity.Milestone;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
 import com.nhnacademy.minidooray.taskapi.entity.Tag;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,38 +22,44 @@ public class TagService {
     private final TagRepository tagRepository;
     private final ProjectRepository projectRepository;
 
-    public List<Tag> getTags(int projectId) {
-        return tagRepository.findAllByProject_ProjectId(projectId);
+    public List<TagDto> getTags(int projectId) {
+        List<TagDto> tagDtos = new ArrayList<>();
+        List<Tag> tags = tagRepository.findAllByProject_ProjectId(projectId);
+        for (Tag tag : tags) {
+            tagDtos.add(new TagDto(tag.getTagId(), tag.getTagName()));
+        }
+        return tagDtos;
     }
 
-    public Tag getTag(int projectId, int id) {
+    public TagDto getTag(int projectId, int id) {
         Optional<Tag> tag = tagRepository.findByTagIdAndProject_ProjectId(id, projectId);
         if (tag.isEmpty()) {
             throw new EntityNotFoundException("Tag id " + id + " not found");
         }
-        return tag.get();
+        return new TagDto(tag.get().getTagId(), tag.get().getTagName());
     }
 
-    public Tag createTag(int projectId, Tag tag) {
+    public TagDto createTag(int projectId, TagDto tagDto) {
         Optional<Project> project = projectRepository.findById(projectId);
         if (project.isEmpty()) {
             throw new EntityNotFoundException("project id : " + projectId + " not found");
         }
-        tag.setProject(project.get());
-
-        return tagRepository.save(tag);
+        Tag tag = tagRepository.save(new Tag(1, tagDto.getTagName(), project.get()));
+        tagDto.setTagId(tag.getTagId());
+        tagDto.setTagName(tag.getTagName());
+        return tagDto;
     }
 
-    public Tag updateTag(int projectId, int id, Tag tag) {
+    public TagDto updateTag(int projectId, int id, TagDto tagDto) {
         Optional<Tag> tagOpt = tagRepository.findByTagIdAndProject_ProjectId(id, projectId);
         Optional<Project> project = projectRepository.findById(projectId);
         if (tagOpt.isEmpty() || project.isEmpty()) {
             throw new EntityNotFoundException(id + ", " + projectId + " Not Found");
         }
-        tagOpt.get().setTagName(tag.getTagName());
+        tagOpt.get().setTagName(tagDto.getTagName());
         tagOpt.get().setProject(project.get());
-
-        return tagRepository.save(tagOpt.get());
+        Tag tag = tagRepository.save(tagOpt.get());
+        return new TagDto(tag.getTagId(), tag.getTagName());
     }
 
     public ResponseEntity<String> deleteTag(int projectId, int id) {

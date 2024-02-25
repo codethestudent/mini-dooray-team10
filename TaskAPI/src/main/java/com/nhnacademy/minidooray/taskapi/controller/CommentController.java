@@ -16,26 +16,26 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<Comment> getComments(@PathVariable int taskId) {
+    public List<CommentDto> getComments(@PathVariable int taskId) {
         return commentService.getComments(taskId);
     }
 
     @GetMapping("/{id}")
-    public Comment getComment(@PathVariable int taskId,
-                              @PathVariable int id) {
+    public CommentDto getComment(@PathVariable int taskId,
+                                 @PathVariable int id) {
         return commentService.getComment(taskId, id);
     }
 
     @PostMapping
-    public Comment createComment(@PathVariable int taskId,
-                                 @RequestBody CommentDto commentDto) {
+    public CommentDto createComment(@PathVariable int taskId,
+                                    @RequestBody CommentDto commentDto) {
         return commentService.createComment(taskId, commentDto);
     }
 
     @PutMapping("/{id}")
-    public Comment updateComment(@PathVariable int taskId,
-                                 @PathVariable int id,
-                                 @RequestBody CommentDto commentDto) {
+    public CommentDto updateComment(@PathVariable int taskId,
+                                    @PathVariable int id,
+                                    @RequestBody CommentDto commentDto) {
         return commentService.updateComment(taskId, id, commentDto);
     }
 

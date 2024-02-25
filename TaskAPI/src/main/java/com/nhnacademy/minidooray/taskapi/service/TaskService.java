@@ -83,6 +83,8 @@ public class TaskService {
 
     public ResponseEntity<String> deleteTask(int projectId, int id) {
         Optional<Task> task = taskRepository.findByTaskIdAndProject_ProjectId(id, projectId);
+
+
         if (task.isPresent()) {
             taskRepository.delete(task.get());
             return ResponseEntity.ok().body("ok");

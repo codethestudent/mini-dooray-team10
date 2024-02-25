@@ -26,16 +26,19 @@ public class Comment {
     private LocalDateTime createdDate;
 
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            @JoinColumn(name = "project_id", referencedColumnName = "project_id")
-    })
-    private ProjectMember projectMember;
-
-    @ManyToOne
     @JoinColumn(name = "task_id")
     private Task task;
 
+    @Column(name = "user_id")
+    private String userId;
+
     public Comment() {
+    }
+
+    public Comment(String content, LocalDateTime createdDate, Task task, String userId) {
+        this.content = content;
+        this.createdDate = createdDate;
+        this.task = task;
+        this.userId = userId;
     }
 }
