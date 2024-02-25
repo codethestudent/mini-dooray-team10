@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class Task {
     private Milestone milestone;
 
     @Column(name = "user_id")
+    @JsonBackReference
     private String userId;
 
     public Task() {

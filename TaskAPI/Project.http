@@ -21,8 +21,8 @@ PUT http://localhost:8080/api/project/3
 Content-Type: application/json
 
 {
-  "projectName": "수정된 example project edited",
-  "projectDescription": "수정된 example project입니다.",
+  "projectName": "수정잘된 example project edited",
+  "projectDescription": "수정잘된 example project입니다.",
   "adminId": "userId"
 }
 

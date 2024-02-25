@@ -2,7 +2,7 @@ GET http://localhost:8080/api/project/1/milestone
 
 ###
 
-GET http://localhost:8080/api/project/1/milestone/2
+GET http://localhost:8080/api/project/1/milestone/9
 
 ###
 
@@ -17,11 +17,11 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8080/api/project/1/milestone/8
+DELETE http://localhost:8080/api/project/1/milestone/9
 
 ###
 
-PUT http://localhost:8080/api/project/1/milestone/6
+PUT http://localhost:8080/api/project/1/milestone/10
 Content-Type: application/json
 
 {

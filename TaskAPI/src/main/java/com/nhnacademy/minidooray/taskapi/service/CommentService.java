@@ -22,7 +22,7 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
-    private final ProjectMemberRepository projectMemberRepository;
+//    private final ProjectMemberRepository projectMemberRepository;
 
     public List<Comment> getComments(int taskId) {
         return commentRepository.findByTask_TaskId(taskId);
@@ -39,9 +39,9 @@ public class CommentService {
     public Comment createComment(int taskId, CommentDto commentDto) {
         ProjectMember.Pk pk = new ProjectMember.Pk(commentDto.getUserId(), commentDto.getProjectId());
         Optional<Task> task = taskRepository.findById(taskId);
-        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
+//        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
 
-        if (task.isEmpty() || projectMember.isEmpty()) {
+        if (task.isEmpty() /*|| projectMember.isEmpty()*/) {
             throw new EntityNotFoundException("task " + taskId + " or projectMember " + pk + " not found");
         }
         if (taskRepository.findById(commentDto.getTaskId()).get().getProject().getProjectId() != commentDto.getProjectId()) {
@@ -52,7 +52,6 @@ public class CommentService {
                 1,
                 commentDto.getContent(),
                 commentDto.getCreatedDate(),
-                projectMember.get(),
                 task.get()
         );
 
@@ -60,18 +59,18 @@ public class CommentService {
     }
 
     public Comment updateComment(int taskId, int id, CommentDto commentDto) {
-        ProjectMember.Pk pk = new ProjectMember.Pk(commentDto.getUserId(), commentDto.getProjectId());
+//        ProjectMember.Pk pk = new ProjectMember.Pk(commentDto.getUserId(), commentDto.getProjectId());
 
         Optional<Comment> commentOpt = commentRepository.findByCommentIdAndTask_TaskId(id, taskId);
-        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
+//        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
         Optional<Task> task = taskRepository.findById(commentDto.getTaskId());
 
-        if (commentOpt.isEmpty() || projectMember.isEmpty() || task.isEmpty()) {
+        if (commentOpt.isEmpty() /*|| projectMember.isEmpty()*/ || task.isEmpty()) {
             throw new EntityNotFoundException("comment id : " + id + " not found");
         }
         commentOpt.get().setContent(commentDto.getContent());
         commentOpt.get().setCreatedDate(commentDto.getCreatedDate());
-        commentOpt.get().setProjectMember(projectMember.get());
+//        commentOpt.get().setProjectMember(projectMember.get());
         commentOpt.get().setTask(task.get());
         return commentRepository.save(commentOpt.get());
     }

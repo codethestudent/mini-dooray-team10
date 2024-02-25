@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.taskapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class ProjectMember {
     @ManyToOne
     @MapsId("projectId")
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     public ProjectMember() {

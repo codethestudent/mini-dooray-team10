@@ -1,6 +1,8 @@
 package com.nhnacademy.minidooray.taskapi.service;
 
+import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
 import com.nhnacademy.minidooray.taskapi.entity.Project;
+import com.nhnacademy.minidooray.taskapi.repository.ProjectMemberRepository;
 import com.nhnacademy.minidooray.taskapi.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final ProjectMemberRepository projectMemberRepository;
+    private final ProjectMemberService projectMemberService;
 
     public List<Project> getProjects() {
         return projectRepository.findAll();
@@ -29,7 +33,10 @@ public class ProjectService {
     }
 
     public Project createProject(Project project) {
-        return projectRepository.save(project);
+        Project savedProject = projectRepository.save(project);
+        String adminId = savedProject.getAdminId();
+        projectMemberService.createProjectMember(project.getProjectId(), new ProjectMemberDto(adminId, project.getProjectId()));
+        return savedProject;
     }
 
     public Project updateProject(int id, Project project) {

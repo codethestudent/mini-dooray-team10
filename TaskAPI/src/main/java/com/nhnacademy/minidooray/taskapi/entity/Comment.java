@@ -25,12 +25,12 @@ public class Comment {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-            @JoinColumn(name = "project_id", referencedColumnName = "project_id")
-    })
-    private ProjectMember projectMember;
+//    @ManyToOne
+//    @JoinColumns({
+//            @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+//            @JoinColumn(name = "project_id", referencedColumnName = "project_id")
+//    })
+//    private ProjectMember projectMember;
 
     @ManyToOne
     @JoinColumn(name = "task_id")
