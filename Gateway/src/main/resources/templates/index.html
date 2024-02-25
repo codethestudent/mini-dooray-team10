@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <div>
+        <div th:if="${session.userId == null or session.userId == ''}">
+            <h3>로그인 되어있지 않습니다!</h3>
+            <a href="/registry/signup">회원가입</a> <br/><br/>
+            <a href="/account/login">로그인</a>
+        </div>
+        <div th:unless="${session.userId == null or session.userId ==''}">
+            <span th:text="${session.userId}"></span>
+            <h3><span th:text="${session.userId}"></span>님! 환영합니다!</h3>
+            <span th:text="${session.account.getUserState()}"></span>
+            <div th:if="${session.account.getUserState().toString() == 'ACTIVE'}" >
+                <a th:href="@{'/state/disable/' + ${session.userId}}">비활성화 하기</a>
+            </div>
+            <div th:if="${session.account.getUserState().toString() == 'DISABLED'}">
+                <a th:href="@{'/state/active/' + ${session.userId}}">활성화 하기</a>
+            </div>
+            <a href="/task/dooray">dooray!!</a>
+            <a th:href="@{'/registry/withdrawal/' + ${session.userId}}">회원탈퇴</a>
+            <a href="/account/logout">로그아웃</a>
+        </div>
+    </div>
+</body>
+</html>

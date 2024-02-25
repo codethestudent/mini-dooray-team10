@@ -1,0 +1,37 @@
+GET http://localhost:9091/api/task/11/comment
+
+###
+
+GET http://localhost:9091/api/task/11/comment/2
+
+###
+
+POST http://localhost:9091/api/task/11/comment
+Content-Type: application/json
+
+{
+  "content": "예시 댓글입니다!!!!",
+  "createdDate": "2021-11-11 11:00:00",
+  "taskId": 14,
+  "userId":"asdfㅁ",
+  "projectId":1
+}
+
+###
+
+DELETE http://localhost:9091/api/task/11/comment/1
+
+###
+
+PUT http://localhost:9091/api/task/11/comment/3
+Content-Type: application/json
+
+{
+  "content": "수정된 예시 댓글입니다!!!!",
+  "createdDate": "2021-11-11 11:00:00",
+  "taskId": 14,
+  "userId":"나천재",
+  "projectId":1
+}
+
+###

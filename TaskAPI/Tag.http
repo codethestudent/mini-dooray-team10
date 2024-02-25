@@ -1,0 +1,31 @@
+GET http://localhost:9091/api/project/37/tag
+
+###
+
+GET http://localhost:9091/api/project/1/tag/3
+
+###
+
+POST http://localhost:9091/api/project/1/tag
+Content-Type: application/json
+
+{
+  "tagName":"tagName",
+  "projectId":36
+}
+
+###
+
+DELETE http://localhost:9091/api/project/1/tag/3
+
+###
+
+PUT http://localhost:9091/api/project/1/tag/4
+Content-Type: application/json
+
+{
+  "tagName":"수정된 태그이름",
+  "projectId":1
+}
+
+###
