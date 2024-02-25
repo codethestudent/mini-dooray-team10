@@ -52,7 +52,7 @@ public class ProjectMemberService {
         return projectMember.get();
     }
 
-    public ProjectMember createProjectMember(int projectId, ProjectMemberDto projectMemberDto) {
+    public ProjectMemberDto createProjectMember(int projectId, ProjectMemberDto projectMemberDto) {
         Optional<Project> project = projectRepository.findById(projectId);
         if (project.isEmpty()) {
             throw new EntityNotFoundException("Project id: " + projectId + " not found");
@@ -63,7 +63,11 @@ public class ProjectMemberService {
         if (projectMemberRepository.existsByPkUserIdAndPkProjectId(projectMemberDto.getUserId(), projectId)) {
             throw new EntityExistsException(projectMember.getPk().getUserId() + ", " + projectId + " already exists");
         }
-        return projectMemberRepository.save(projectMember);
+        ProjectMember projectMember1 = projectMemberRepository.save(projectMember);
+        ProjectMemberDto projectMemberDto1 = new ProjectMemberDto();
+        projectMemberDto1.setUserId(projectMember1.getPk().getUserId());
+        projectMemberDto1.setProjectId(projectMember1.getProject().getProjectId());
+        return projectMemberDto1;
     }
 
     public ProjectMember updateProjectMember(ProjectMember projectMember) {

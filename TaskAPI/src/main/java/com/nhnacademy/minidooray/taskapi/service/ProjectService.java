@@ -17,7 +17,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepository projectRepository;
-    private final ProjectMemberRepository projectMemberRepository;
     private final ProjectMemberService projectMemberService;
 
     public List<Project> getProjects() {

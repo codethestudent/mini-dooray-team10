@@ -33,6 +33,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
+    @JsonBackReference
     private Project project;
 
     @OneToOne
@@ -40,7 +41,6 @@ public class Task {
     private Milestone milestone;
 
     @Column(name = "user_id")
-    @JsonBackReference
     private String userId;
 
     public Task() {

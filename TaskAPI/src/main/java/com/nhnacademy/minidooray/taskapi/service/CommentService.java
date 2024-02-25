@@ -9,11 +9,13 @@ import com.nhnacademy.minidooray.taskapi.repository.ProjectMemberRepository;
 import com.nhnacademy.minidooray.taskapi.repository.ProjectRepository;
 import com.nhnacademy.minidooray.taskapi.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,57 +24,69 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final TaskRepository taskRepository;
-//    private final ProjectMemberRepository projectMemberRepository;
 
-    public List<Comment> getComments(int taskId) {
-        return commentRepository.findByTask_TaskId(taskId);
-    }
-
-    public Comment getComment(int taskId, int id) {
-        Optional<Comment> comment = commentRepository.findByCommentIdAndTask_TaskId(id, taskId);
-        if (comment.isEmpty()) {
-            throw new EntityNotFoundException("Comment id " + id + " not found");
+    public List<CommentDto> getComments(int taskId) {
+        List<Comment> comments = commentRepository.findByTask_TaskId(taskId);
+        List<CommentDto> commentDtos = new ArrayList<>();
+        for (Comment comment : comments) {
+            CommentDto commentDto = new CommentDto();
+            BeanUtils.copyProperties(comment, commentDto);
+            commentDto.setTaskId(taskId);
+            commentDtos.add(commentDto);
         }
-        return comment.get();
+        return commentDtos;
     }
 
-    public Comment createComment(int taskId, CommentDto commentDto) {
-        ProjectMember.Pk pk = new ProjectMember.Pk(commentDto.getUserId(), commentDto.getProjectId());
+    public CommentDto getComment(int taskId, int commentId) {
+        Optional<Comment> comment = commentRepository.findByCommentIdAndTask_TaskId(commentId, taskId);
         Optional<Task> task = taskRepository.findById(taskId);
-//        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
 
-        if (task.isEmpty() /*|| projectMember.isEmpty()*/) {
-            throw new EntityNotFoundException("task " + taskId + " or projectMember " + pk + " not found");
+        if (comment.isEmpty() || task.isEmpty()) {
+            throw new EntityNotFoundException("Comment commentId " + commentId + " not found");
         }
-        if (taskRepository.findById(commentDto.getTaskId()).get().getProject().getProjectId() != commentDto.getProjectId()) {
+        CommentDto commentDto = new CommentDto();
+        BeanUtils.copyProperties(comment.get(), commentDto);
+        commentDto.setTaskId(taskId);
+        commentDto.setProjectId(task.get().getProject().getProjectId());
+        return commentDto;
+    }
+
+    public CommentDto createComment(int taskId, CommentDto commentDto) {
+        Optional<Task> task = taskRepository.findById(taskId);
+
+        if (task.isEmpty()) {
+            throw new EntityNotFoundException("task " + taskId + " not found");
+        }
+        int projectId = task.get().getProject().getProjectId();
+        if (projectId != commentDto.getProjectId()) {
             throw new EntityNotFoundException("comment entity not found in project : " + commentDto.getProjectId());
         }
-
-        Comment comment = new Comment(
-                1,
+        Comment comment = commentRepository.save(new Comment(
                 commentDto.getContent(),
                 commentDto.getCreatedDate(),
-                task.get()
-        );
-
-        return commentRepository.save(comment);
+                task.get(),
+                commentDto.getUserId()
+        ));
+        BeanUtils.copyProperties(comment, commentDto);
+        return commentDto;
     }
 
-    public Comment updateComment(int taskId, int id, CommentDto commentDto) {
-//        ProjectMember.Pk pk = new ProjectMember.Pk(commentDto.getUserId(), commentDto.getProjectId());
+    public CommentDto updateComment(int taskId, int commentId, CommentDto commentDto) {
+        Optional<Comment> commentOpt = commentRepository.findByCommentIdAndTask_TaskId(commentId, taskId);
+        Optional<Task> task = taskRepository.findByTaskIdAndProject_ProjectId(taskId, commentDto.getProjectId());
 
-        Optional<Comment> commentOpt = commentRepository.findByCommentIdAndTask_TaskId(id, taskId);
-//        Optional<ProjectMember> projectMember = projectMemberRepository.findById(pk);
-        Optional<Task> task = taskRepository.findById(commentDto.getTaskId());
-
-        if (commentOpt.isEmpty() /*|| projectMember.isEmpty()*/ || task.isEmpty()) {
-            throw new EntityNotFoundException("comment id : " + id + " not found");
+        if (commentOpt.isEmpty() || task.isEmpty()) {
+            throw new EntityNotFoundException("comment commentId : " + commentId + " not found");
         }
         commentOpt.get().setContent(commentDto.getContent());
         commentOpt.get().setCreatedDate(commentDto.getCreatedDate());
-//        commentOpt.get().setProjectMember(projectMember.get());
+        commentOpt.get().setUserId(commentDto.getUserId());
         commentOpt.get().setTask(task.get());
-        return commentRepository.save(commentOpt.get());
+        CommentDto commentDto1 = new CommentDto();
+        BeanUtils.copyProperties(commentOpt.get(), commentDto1);
+        commentDto1.setTaskId(taskId);
+        commentDto1.setProjectId(task.get().getProject().getProjectId());
+        return commentDto1;
     }
 
     public ResponseEntity<String> deleteComment(int taskId, int id) {

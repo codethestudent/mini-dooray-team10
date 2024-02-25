@@ -2,8 +2,6 @@ package com.nhnacademy.minidooray.taskapi.controller;
 
 import com.nhnacademy.minidooray.taskapi.domain.ProjectDto;
 import com.nhnacademy.minidooray.taskapi.domain.ProjectMemberDto;
-import com.nhnacademy.minidooray.taskapi.entity.Project;
-import com.nhnacademy.minidooray.taskapi.entity.ProjectMember;
 import com.nhnacademy.minidooray.taskapi.service.ProjectMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +26,8 @@ public class ProjectMemberController {
     }
 
     @PostMapping("/project/{projectId}")
-    public ProjectMember createProjectMember(@PathVariable int projectId,
-                                             @RequestBody ProjectMemberDto projectMemberDto) {
+    public ProjectMemberDto createProjectMember(@PathVariable int projectId,
+                                                @RequestBody ProjectMemberDto projectMemberDto) {
         return projectMemberService.createProjectMember(projectId, projectMemberDto);
     }
 

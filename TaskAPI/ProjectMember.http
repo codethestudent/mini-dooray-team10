@@ -1,22 +1,22 @@
-GET http://localhost:8080/api/member/project/2
+GET http://localhost:9091/api/member/project/1
 
 ###
 
-GET http://localhost:8080/api/member/test_user8
+GET http://localhost:9091/api/member/ttt
 
 ###
 
-POST http://localhost:8080/api/member/project/2
+POST http://localhost:9091/api/member/project/2
 Content-Type: application/json
 
 {
-  "userId": "test_user8",
+  "userId": "test_user20",
   "projectId":2
 }
 
 ###
 
-DELETE http://localhost:8080/api/member/test_user8/project/1
+DELETE http://localhost:9091/api/member/test_user7/project/1
 
 ###
 

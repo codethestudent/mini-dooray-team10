@@ -1,12 +1,12 @@
-GET http://localhost:8080/api/project
+GET http://localhost:9091/api/project
 
 ###
 
-GET http://localhost:8080/api/project/1
+GET http://localhost:9091/api/project/1
 
 ###
 
-POST http://localhost:8080/api/project
+POST http://localhost:9091/api/project
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8080/api/project/3
+PUT http://localhost:9091/api/project/6
 Content-Type: application/json
 
 {
@@ -28,6 +28,6 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8080/api/project/1
+DELETE http://localhost:9091/api/project/1
 
 ###

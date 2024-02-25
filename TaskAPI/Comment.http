@@ -1,36 +1,37 @@
-GET http://localhost:8080/api/task/1/comment
+GET http://localhost:9091/api/task/11/comment
 
 ###
 
-GET http://localhost:8080/api/task/1/comment/2
+GET http://localhost:9091/api/task/11/comment/2
 
 ###
 
-POST http://localhost:8080/api/task/14/comment
+POST http://localhost:9091/api/task/11/comment
 Content-Type: application/json
 
 {
-  "content": "예시 댓글입니다.",
+  "content": "예시 댓글입니다!!!!",
   "createdDate": "2021-11-11 11:00:00",
   "taskId": 14,
-  "userId":"asdf",
+  "userId":"asdfㅁ",
   "projectId":1
 }
 
 ###
 
-DELETE http://localhost:8080/api/task/1/comment/1
+DELETE http://localhost:9091/api/task/11/comment/1
 
 ###
 
-PUT http://localhost:8080/api/task/1/comment/6
+PUT http://localhost:9091/api/task/11/comment/3
 Content-Type: application/json
 
 {
-  "milestoneName": "수정된 mileStoneName",
-  "startDate": "2021-11-11 11:00:00",
-  "endDate": "2021-11-11 11:00:00",
-  "projectId": 2
+  "content": "수정된 예시 댓글입니다!!!!",
+  "createdDate": "2021-11-11 11:00:00",
+  "taskId": 14,
+  "userId":"나천재",
+  "projectId":1
 }
 
 ###
