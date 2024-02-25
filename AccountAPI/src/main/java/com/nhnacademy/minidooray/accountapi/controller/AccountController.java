@@ -29,7 +29,6 @@ public class AccountController {
      * <p>
      * GetMapping
      * @param userId
-     * @return
      */
     @GetMapping("/get/user")
     public ResponseEntity<Account> getAccount(String userId) {
