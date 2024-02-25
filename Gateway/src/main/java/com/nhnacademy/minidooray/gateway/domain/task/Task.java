@@ -7,6 +7,6 @@ public class Task {
     private String taskName;
     private LocalDateTime deadLine;
     private String content;
-    private Milestone milestone;
+    private MilestoneResponse milestoneResponse;
 
 }

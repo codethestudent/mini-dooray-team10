@@ -32,7 +32,6 @@ public class LoginController {
         return "login";
     }
 
-
     @PostMapping("/login")
     public String tryToLogin(@ModelAttribute LoginRequest loginRequest, BindingResult bindingResult, HttpServletRequest httpServletRequest, Model model, RedirectAttributes redirectAttributes) throws Exception {
 
@@ -53,7 +52,6 @@ public class LoginController {
         session.setAttribute("account",accountDto);
         session.setMaxInactiveInterval(2*60*60);
 
-        redirectAttributes.addFlashAttribute("id", accountDto.getUserId());
         return "redirect:/task/dooray";
     }
 

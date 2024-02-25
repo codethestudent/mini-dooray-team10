@@ -2,16 +2,18 @@ package com.nhnacademy.minidooray.gateway.domain.task;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class Milestone {
+@ToString
+public class MilestoneResponse {
 
     int milestoneId;
     String milestoneName;
-    LocalDateTime start_date;
-    LocalDateTime end_date;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
 
 }

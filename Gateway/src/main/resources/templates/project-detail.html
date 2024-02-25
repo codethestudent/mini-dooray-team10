@@ -30,7 +30,7 @@
 </div>
 <div th:if="${#lists.isEmpty(taskList)}">
     <p>Task 없음!!</p>
-    <a href="~~~">task 추가</a>
+    <a th:href="@{'/task/project/task/form/' + ${project.getProjectId()}}">Task 추가</a>
 </div>
 <div th:unless="${#lists.isEmpty(taskList)}">
     <table border="1">
@@ -51,19 +51,49 @@
 <h2>Tags</h2>
 <div th:if="${#lists.isEmpty(tagList)}">
     <p>프로젝트 태그 없음!!</p>
-    <a href="~~~">태그 추가</a>
+    <a th:href="@{'/task/tag/' + ${project.getProjectId()}}">태그 추가</a>
 </div>
 <div th:unless="${#lists.isEmpty(tagList)}">
-    <ul>
-        <li><a th:each="tag:${tagList}" th:href="" th:text="${tag.name}"></a></li>
-        <!-- 클릭하면 설정으로 -->
-    </ul>
-    <a href="~~~">태그 추가</a>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Tag Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="tag : ${tagList}">
+            <td th:text="${tag.getTagName()}">Tag Name</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{'/task/tag/' + ${project.getProjectId()}}">태그 추가</a>
 </div>
 
 <h2>Milestones</h2>
-<ul>
-    <!-- 마일스톤 -->
-</ul>
+<div th:if="${#lists.isEmpty(milestoneList)}">
+    <p>마일스톤 없음!!</p>
+    <a th:href="@{'/task/milestone/' + ${project.getProjectId()}}">마일스톤 추가</a>
+</div>
+<div th:unless="${#lists.isEmpty(milestoneList)}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Milestone Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="milestone : ${milestoneList}">
+            <td th:text="${milestone.milestoneName}">Milestone Name</td>
+            <td th:text="${#dates.format(milestone.startDate, 'yyyy-MM-dd HH:mm:ss')}">Start Date</td>
+            <td th:text="${#dates.format(milestone.endDate, 'yyyy-MM-dd HH:mm:ss')}">End Date</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{'/task/milestone/' + ${project.getProjectId()}}">마일스톤 추가</a>
+</div>
+
+<a th:href="@{'/task/dooray'}">프로젝트 리스트로 이동</a>
 </body>
 </html>

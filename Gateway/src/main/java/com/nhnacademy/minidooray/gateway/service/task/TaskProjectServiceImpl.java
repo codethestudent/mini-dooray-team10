@@ -1,10 +1,7 @@
 package com.nhnacademy.minidooray.gateway.service.task;
 
 import com.nhnacademy.minidooray.gateway.adaptor.task.TaskProjectAdaptor;
-import com.nhnacademy.minidooray.gateway.domain.task.Project;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectDto;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectMemberRequest;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectRequest;
+import com.nhnacademy.minidooray.gateway.domain.task.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,4 +40,25 @@ public class TaskProjectServiceImpl implements TaskProjectService {
     public ProjectDto saveSingleProjectMember(int projectId, ProjectMemberRequest projectMemberRequest) {
         return taskProjectAdaptor.saveProjectMember(projectId, projectMemberRequest);
     }
+
+    @Override
+    public List<TagResponse> getListTag(String projectId) {
+        return taskProjectAdaptor.getProjectTagList(projectId);
+    }
+
+    @Override
+    public TagResponse saveSingleProjectTag(TagRequest tagRequest, String projectId) {
+        return taskProjectAdaptor.saveProjectTag(tagRequest, projectId);
+    }
+
+    @Override
+    public MilestoneResponse saveSingleMilestone(MilestoneRequest milestoneRequest, String projectId) {
+        return taskProjectAdaptor.saveProjectMilestone(milestoneRequest, projectId);
+    }
+
+    @Override
+    public List<MilestoneResponse> getListMilestoneByProjectId(String projectId) {
+        return taskProjectAdaptor.getMilestoneListByProjectId(projectId);
+    }
+
 }

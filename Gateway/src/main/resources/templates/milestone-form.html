@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko" >
+<head>
+    <meta charset="UTF-8">
+    <title>Create Milestone</title>
+</head>
+<body>
+<h1>Create Milestone</h1>
+
+<form id="milestoneForm" action="/task/milestone/create" method="post">
+    <input type="hidden" name="projectId" th:value="${projectId}" />
+    <label for="milestoneName">Milestone Name:</label><br>
+    <input type="text" id="milestoneName" name="milestoneName"><br>
+
+    <label for="startDate">Start Date:</label><br>
+    <input type="datetime-local" id="startDate" name="startDate" pattern="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"><br>
+
+    <label for="endDate">End Date:</label><br>
+    <input type="datetime-local" id="endDate" name="endDate" pattern="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"><br><br>
+
+    <button type="submit">마일스톤 등록</button>
+</form>
+
+</body>
+</html>

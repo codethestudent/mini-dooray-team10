@@ -1,10 +1,7 @@
 package com.nhnacademy.minidooray.gateway.controller.task;
 
 import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.task.Project;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectDto;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectMemberRequest;
-import com.nhnacademy.minidooray.gateway.domain.task.ProjectRequest;
+import com.nhnacademy.minidooray.gateway.domain.task.*;
 import com.nhnacademy.minidooray.gateway.service.account.AccountService;
 import com.nhnacademy.minidooray.gateway.service.task.TaskProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,11 +30,9 @@ public class TaskController {
     }
 
     @GetMapping("/dooray")
-    public String goToDooray(Model model){
+    public String goToDooray(Model model, HttpSession session){
 
-        log.info("로그인 성공 후 두라이 홈 id : {}", model.getAttribute("id"));
-
-        List<ProjectDto> projectDtoList = taskProjectService.getListProjectDto((String) model.getAttribute("id"));
+        List<ProjectDto> projectDtoList = taskProjectService.getListProjectDto((String) session.getAttribute("userId"));
 
         if(!projectDtoList.isEmpty()) {
             model.addAttribute("projectList", projectDtoList);
@@ -46,19 +42,30 @@ public class TaskController {
     }
 
     @GetMapping("/project/{id}")
-    public String getProject(@PathVariable("id") String id, Model model) {
+    public String getProject(@PathVariable("id") String projectId, Model model) {
 
-        log.info("프로젝트 단건조회 프로젝트 ID : {}", id);
+        log.info("프로젝트 단건조회 프로젝트 ID : {}", projectId);
 
-        Project project = taskProjectService.getSingleProject(id);
-
-        List<ProjectMemberRequest> memberRequestList = taskProjectService.getListMemberOfProject(id);
-        //task 리스트 추가
-        //tag 리스트 추가
-        //마일스톤 추가
-
+        Project project = taskProjectService.getSingleProject(projectId);
+        //프로젝트 리스트 추가
         model.addAttribute("project", project);
+
+        //member 리스트 추가
+        List<ProjectMemberRequest> memberRequestList = taskProjectService.getListMemberOfProject(projectId);
         model.addAttribute("memberList", memberRequestList);
+        //task 리스트 추가
+        // todo
+        //tag 리스트 추가
+        List<TagResponse> tagResponseList = taskProjectService.getListTag(projectId);
+
+        for(TagResponse tag : tagResponseList ) {
+            log.info("tag name : {}", tag.getTagName());
+        }
+
+        model.addAttribute("tagList", tagResponseList);
+        //마일스톤 추가
+        // todo
+
         return "project-detail";
     }
 
@@ -86,6 +93,8 @@ public class TaskController {
             model.addAttribute("projectId", projectId);
             model.addAttribute("accountList", accountList);
         } else {
+            // todo else if (p != null) 으로 변경 해보기
+            //assert p != null;
             model.addAttribute("projectId", p.getProjectId());
             log.info("프로젝트 멤버 추가 redirect 요청 project : {}", p.getProjectId());
         }
@@ -122,4 +131,57 @@ public class TaskController {
 
         return "redirect:/task/dooray";
     }
+
+    @GetMapping("/tag/{id}")
+    public String goToTagForm(@PathVariable("id") String projectId, Model model) {
+        log.info("태그 추가 요청 프로젝트 아이디 : {}", projectId);
+        model.addAttribute("projectId", projectId);
+
+        return "tag-form";
+    }
+
+    @PostMapping("/tag/form")
+    public String saveTag(@ModelAttribute TagRequest tagRequest, @RequestParam("projectId") String projectId, RedirectAttributes redirectAttributes) {
+
+        TagResponse tagResponse = taskProjectService.saveSingleProjectTag(tagRequest, projectId);
+
+        List<TagResponse> tagResponseList = taskProjectService.getListTag(projectId);
+
+        redirectAttributes.addFlashAttribute("tagList", tagResponseList);
+
+        return "redirect:/task/project/"+projectId;
+    }
+
+    @GetMapping("/milestone/{id}")
+    public String goToMilestoneForm(@PathVariable("id") String projectId, Model model) {
+        log.info("마일스톤 추가 요청 프로젝트 아이디 : {}", projectId);
+
+        model.addAttribute("projectId", projectId);
+
+        return "milestone-form";
+    }
+
+    @PostMapping("/milestone/create")
+    public String saveMilestone(@ModelAttribute MilestoneRequest milestoneRequest, @RequestParam("startDate") LocalDateTime start, @RequestParam("endDate") LocalDateTime end, @RequestParam("projectId") String projectId, RedirectAttributes redirectAttributes) {
+        log.info("startDate : {}", start);
+        log.info("endDate : {}", end);
+        log.info("Milestone : {}", milestoneRequest);
+        // 저장
+        MilestoneResponse milestoneResponse = taskProjectService.saveSingleMilestone(milestoneRequest, projectId);
+
+        // 마일스톤 리스트
+        List<MilestoneResponse> milestoneResponseList = taskProjectService.getListMilestoneByProjectId(projectId);
+        redirectAttributes.addFlashAttribute("milestoneList", milestoneResponseList);
+
+        return "redirect:/project/"+projectId;
+    }
+
+
+//    @GetMapping("/project/task/form/{id}")
+//    public String tryToSaveTask(@PathVariable("id") String projectId) {
+//
+//        // todo 업무 등록전에 마일스톤 리스트 들고 오기
+//
+//        return "";
+//    }
 }

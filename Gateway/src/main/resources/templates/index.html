@@ -20,6 +20,7 @@
             <div th:if="${session.account.getUserState().toString() == 'DISABLED'}">
                 <a th:href="@{'/state/active/' + ${session.userId}}">활성화 하기</a>
             </div>
+            <a href="/task/dooray">dooray!!</a>
             <a th:href="@{'/registry/withdrawal/' + ${session.userId}}">회원탈퇴</a>
             <a href="/account/logout">로그아웃</a>
         </div>
