@@ -21,7 +21,6 @@ public class LoginFilter implements Filter {
         String reqUrl = req.getRequestURI();
 
         HttpSession session = req.getSession(false);
-        log.info("--------{}", session == null);
 
         try {
                 if(Objects.isNull(session) || session.getAttribute("userId") == null) {

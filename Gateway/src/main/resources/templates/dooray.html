@@ -5,9 +5,28 @@
     <title>Title</title>
 </head>
 <body>
-    <h3 th:text="Test">dzdz</h3>
-    <span th:text="${session.userId}"></span>
-    <span th:text="${session.account.getUserEmail()}"></span>
-    <span>dooray !!</span>
+<h1>Project List</h1>
+<div th:if="${#lists.isEmpty(projectList)}">
+    <p>추가된 프로젝트 없음!!</p>
+    <a href="/task/projectForm">프로젝트 추가</a>
+</div>
+<div th:unless="${#lists.isEmpty(projectList)}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Project Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projectList}">
+            <td>
+                <a th:href="@{'/task/project/' + ${project.getProjectId()}}" th:text="${project.getProjectName()}"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/task/projectForm">프로젝트 추가</a>
+</div>
+
 </body>
 </html>

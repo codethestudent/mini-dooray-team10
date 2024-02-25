@@ -1,7 +1,7 @@
 package com.nhnacademy.minidooray.gateway.controller.account;
 
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.LoginRequest;
 import com.nhnacademy.minidooray.gateway.service.account.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -53,7 +53,7 @@ public class LoginController {
         session.setAttribute("account",accountDto);
         session.setMaxInactiveInterval(2*60*60);
 
-        //redirectAttributes.addFlashAttribute("account", accountDto);
+        redirectAttributes.addFlashAttribute("id", accountDto.getUserId());
         return "redirect:/task/dooray";
     }
 

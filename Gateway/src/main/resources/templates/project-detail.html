@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Detail</title>
+</head>
+<body>
+<h1>Project Detail</h1>
+<h2 th:text="${project.getProjectName()}"></h2>
+
+<h2>Members</h2>
+<div th:if="${#lists.isEmpty(memberList)}">
+    <p>프로젝트 멤버 없음!!</p>
+    <a href="/task/project/member/form">멤버 추가</a>
+</div>
+<div th:unless="${#lists.isEmpty(memberList)}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Member Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${memberList}">
+            <td th:text="${member.getUserId()}">Member Name</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{'/task/project/member/form/' + ${project.getProjectId()}}">멤버 추가</a>
+</div>
+<div th:if="${#lists.isEmpty(taskList)}">
+    <p>Task 없음!!</p>
+    <a href="~~~">task 추가</a>
+</div>
+<div th:unless="${#lists.isEmpty(taskList)}">
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Task Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${taskList}">
+            <td th:text="${task.name}">Task Name</td>
+            <!-- 윗줄 a태그로 변경, 누르면 수정되게 -->
+        </tr>
+        </tbody>
+    </table>
+    <a href="~~">Task 추가</a>
+</div>
+<h2>Tags</h2>
+<div th:if="${#lists.isEmpty(tagList)}">
+    <p>프로젝트 태그 없음!!</p>
+    <a href="~~~">태그 추가</a>
+</div>
+<div th:unless="${#lists.isEmpty(tagList)}">
+    <ul>
+        <li><a th:each="tag:${tagList}" th:href="" th:text="${tag.name}"></a></li>
+        <!-- 클릭하면 설정으로 -->
+    </ul>
+    <a href="~~~">태그 추가</a>
+</div>
+
+<h2>Milestones</h2>
+<ul>
+    <!-- 마일스톤 -->
+</ul>
+</body>
+</html>

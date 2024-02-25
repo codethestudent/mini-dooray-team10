@@ -1,10 +1,14 @@
 package com.nhnacademy.minidooray.gateway.adaptor.account;
 
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.LoginRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.SignupRequest;
+
+import java.util.List;
 
 public interface AccountAdaptor {
+
+    List<AccountDto> getUserList();
 
     AccountDto loginExistUser(LoginRequest loginRequest);
 

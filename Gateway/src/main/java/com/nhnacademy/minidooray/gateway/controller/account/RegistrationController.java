@@ -1,7 +1,7 @@
 package com.nhnacademy.minidooray.gateway.controller.account;
 
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.SignupRequest;
 import com.nhnacademy.minidooray.gateway.service.account.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 import java.util.Objects;
 
 @Slf4j

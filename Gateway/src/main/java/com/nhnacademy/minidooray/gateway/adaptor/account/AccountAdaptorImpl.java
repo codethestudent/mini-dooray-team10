@@ -1,14 +1,15 @@
 package com.nhnacademy.minidooray.gateway.adaptor.account;
 
 import com.nhnacademy.minidooray.gateway.config.AccountAdatptorProperties;
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.LoginRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.SignupRequest;
 import com.nhnacademy.minidooray.gateway.exception.HandleAuthenticationFailureException;
 import com.nhnacademy.minidooray.gateway.exception.HandleDuplicateIdException;
 import com.nhnacademy.minidooray.gateway.exception.HandleUserIdNotFoundException;
 import com.nhnacademy.minidooray.gateway.exception.HandleUserWithdrawalException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +27,25 @@ public class AccountAdaptorImpl implements AccountAdaptor{
     public AccountAdaptorImpl(RestTemplate restTemplate, AccountAdatptorProperties accountAdatptorProperties) {
         this.restTemplate = restTemplate;
         this.accountAdatptorProperties = accountAdatptorProperties;
+    }
+
+    @Override
+    public List<AccountDto> getUserList() {
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(httpHeaders);
+        ResponseEntity<List<AccountDto>> responseEntity = restTemplate.exchange(
+                accountAdatptorProperties.getUrlName() + "/user/get/users",
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<List<AccountDto>>() {
+                }
+        );
+
+        return responseEntity.getBody();
     }
 
     /**
@@ -82,6 +102,7 @@ public class AccountAdaptorImpl implements AccountAdaptor{
 
                 return respEntity.getBody();
             } catch (Exception exception) {
+                log.info("ex message : "+exception.getMessage());
                 throw new HandleDuplicateIdException("Account is already exist - gateway");
             }
     }
@@ -92,8 +113,6 @@ public class AccountAdaptorImpl implements AccountAdaptor{
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-        log.info("{}", accountAdatptorProperties.getUrlName() + "/update/dsiabled/"+id);
 
         HttpEntity<String> requestHttpEntity = new HttpEntity<>(id, httpHeaders);
         ResponseEntity<AccountDto> respEntity = restTemplate.exchange(

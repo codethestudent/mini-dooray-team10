@@ -1,5 +1,6 @@
 package com.nhnacademy.minidooray.gateway.advice;
 
+import com.nhnacademy.minidooray.gateway.adaptor.account.AccountAdaptorImpl;
 import com.nhnacademy.minidooray.gateway.exception.HandleDuplicateIdException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;

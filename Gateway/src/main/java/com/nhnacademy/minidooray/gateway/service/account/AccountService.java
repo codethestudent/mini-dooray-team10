@@ -1,11 +1,14 @@
 package com.nhnacademy.minidooray.gateway.service.account;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.LoginRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.SignupRequest;
+
+import java.util.List;
 
 public interface AccountService {
+
+    List<AccountDto> getAccountList();
 
     AccountDto getAccount(LoginRequest loginRequest);
 

@@ -1,10 +1,12 @@
 package com.nhnacademy.minidooray.gateway.service.account;
 
 import com.nhnacademy.minidooray.gateway.adaptor.account.AccountAdaptor;
-import com.nhnacademy.minidooray.gateway.domain.AccountDto;
-import com.nhnacademy.minidooray.gateway.domain.LoginRequest;
-import com.nhnacademy.minidooray.gateway.domain.SignupRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.AccountDto;
+import com.nhnacademy.minidooray.gateway.domain.account.LoginRequest;
+import com.nhnacademy.minidooray.gateway.domain.account.SignupRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -13,6 +15,11 @@ public class AccountServiceImpl implements AccountService {
 
     public AccountServiceImpl(AccountAdaptor accountAdaptor) {
         this.accountAdaptor = accountAdaptor;
+    }
+
+    @Override
+    public List<AccountDto> getAccountList() {
+        return accountAdaptor.getUserList();
     }
 
     @Override
